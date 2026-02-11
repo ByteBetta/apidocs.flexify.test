@@ -1,38 +1,28 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>API Docs</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-    <style>
-      body { margin: 0; }
-      #error { padding: 16px; font-family: Arial, sans-serif; }
-    </style>
-  </head>
-  <body>
-    <div id="error"></div>
-    <div id="redoc-container"></div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>API Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./swagger-ui/swagger-ui.css" />
+</head>
+<body>
+  <div id="swagger-ui"></div>
 
-    <script>
-      const specUrl = new URL("openapi.json", window.location.href).toString();
-
-      fetch(specUrl)
-        .then(r => {
-          if (!r.ok) throw new Error(`openapi.json not reachable: ${r.status} ${r.statusText}`);
-          return r.json();
-        })
-        .then(spec => {
-          if (!spec.openapi || !spec.info || !spec.paths) {
-            throw new Error("openapi.json is not a valid OpenAPI spec (missing openapi/info/paths).");
-          }
-          document.getElementById("error").innerHTML = "";
-          Redoc.init(specUrl, {}, document.getElementById("redoc-container"));
-        })
-        .catch(err => {
-          document.getElementById("error").innerHTML =
-            "<h3>Docs failed to load</h3><pre>" + err.message + "</pre><p>Spec URL: " + specUrl + "</p>";
-        });
-    </script>
-  </body>
+  <script src="./swagger-ui/swagger-ui-bundle.js"></script>
+  <script src="./swagger-ui/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = () => {
+      SwaggerUIBundle({
+        url: "./openapi.json",
+        dom_id: "#swagger-ui",
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: "StandaloneLayout"
+      });
+    };
+  </script>
+</body>
 </html>
